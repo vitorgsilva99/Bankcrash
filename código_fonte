@@ -1,0 +1,896 @@
+package Bankcrash;
+
+/* 
+*Projeto integrador 1ºSem. TADS - Turma C. - RPG textual, linguagem JAVA.
+*DEVS.0 - Marcelo Guimarães / Renan Nascimento / Vitor Gomes / Samuel Jesus
+ */
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.UUID;
+
+public class Bankcrash_Jogo {
+
+    static int vida = 2; // variável vida estática
+    static int percepçao = 0; // variável percepçao estática
+    static PrintWriter pr = null;
+    static int pontuacao = (vida + percepçao);
+
+    public static void main(String[] args) throws Exception {
+        //escritor();
+
+        FileOutputStream arquivo = new FileOutputStream("ranking.txt");
+        pr = new PrintWriter(arquivo);
+
+        Bankcrash_Jogo B = new Bankcrash_Jogo();
+
+        B.setmenuPrincipal();
+        B.setescolhaDePersonagem();
+        B.setEmpresário();
+        B.setEmpresárioDes1(percepçao);
+        B.setEmpresárioDes2(percepçao);
+        B.setEmpresárioDes3(percepçao);
+        B.setEmpresárioDes4(percepçao);
+        B.setEmpresárioDes5(percepçao);
+
+        Scanner imput = new Scanner(System.in);
+        System.out.println("\n-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - ");
+        System.out.println("                              ~ ®.NãoIntendo ~");
+        System.out.println("                                  Presents");
+        System.out.println("-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - ");
+
+        int a;
+        do {
+            System.out.println("Digite '0' para prosseguir");
+            a = imput.nextInt();
+            if ((a > 0) || (a < 0)) {
+                System.out.println("Opção inválida, digite novamente!");
+            }
+        } while (a != 0);
+
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        System.out.println("                              B.A.N.K.C.R.A.S.H");
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        // -> interface de apresentação do jogo
+    } // chave main - iniciando jogo 
+
+    public static void ranking(int pontuacao) {
+
+        try {
+            FileWriter endereco = new FileWriter("./pontos.txt", true);
+            PrintWriter escritor = new PrintWriter(endereco);
+
+            escritor.print(pontuacao + "\n");
+            escritor.close();
+            endereco.close();
+
+        } catch (IOException e) {
+            System.out.println("Erro de gravação do arquivo");
+        }
+    }// Adiciona a pontuação de cada partida no diretorio do jogo
+
+    public static void lerArquivoTexto(String a) {
+
+        String arq = a;
+
+        try {
+            FileInputStream arquivo = new FileInputStream(arq);
+            InputStreamReader input = new InputStreamReader(arquivo);
+            BufferedReader br = new BufferedReader(input);
+            //String dados = new String(Files.readAllBytes(file.toPath()));
+            String linha;
+
+            do {
+                linha = br.readLine();
+                if (linha != null) {
+                    System.out.println(linha);
+                }
+            } while (linha != null);
+
+        } catch (Exception e) {
+            System.out.println("Erro ao ler o arquivo");
+        }
+    } // Ler arquivos txt do diretório
+
+    public String menuPrincipal;
+    public int escolhaDePersonagem;
+    public String Empresário;
+    public String EmpresárioDesc1;
+    public String EmpresárioDesc2;
+    public String EmpresárioDesc3;
+    public String EmpresárioDesc4;
+    public String EmpresárioDesc5;
+
+    public void setmenuPrincipal() {
+
+        Scanner imput = new Scanner(System.in);
+        int opcao;
+        int a;
+        String arquivo = "arquivo.txt";
+        lerArquivoTexto(arquivo);
+        opcao = imput.nextInt();
+
+        switch (opcao) { // estrutura utilizada para seguir a opção do usuário entre 1 - 2 - 3 - 4.
+
+            case 1 -> {// Instruções do jogo
+                opcao = 1;
+                String arquivo2 = "arquivo2.txt";
+                lerArquivoTexto(arquivo2);
+
+                do {
+                    System.out.println("\nDigite '1' para voltar ao menu");
+                    a = imput.nextInt();
+                    if (a < 1 || a > 1) {
+                        System.out.println("Opção inválida, digite novamente!");
+                    }
+                } while (a != 1);
+                System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                setmenuPrincipal(); // voltando ao Menu Principal
+            }
+
+            case 2 -> { // Iniciando o jogo
+                opcao = 2;
+                String b;
+
+                System.out.println("\n-Iniciando o jogo.....");
+                System.out.println("\n      *** Bankcrash ***\n");
+                System.out.println("Quando o premio é a vida, a saúde, você seria capaz de fazer tudo?\n Sim ou Não?");
+                b = imput.next();
+
+                if (b.equalsIgnoreCase("não") || b.equalsIgnoreCase("nao") || b.equalsIgnoreCase("n")) {
+                    System.out.println("\nEssa aventura não é para você!");
+                    System.out.println("Retorne ao menu principal agora!");
+                    do {
+                        System.out.println("\nDigite '1' para prosseguir");
+                        a = imput.nextInt();
+                        if (a < 1 || a > 1) {
+                            System.out.println("Opção inválida, digite novamente!");
+                        }
+                    } while (a != 1);
+                    System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                    setmenuPrincipal();
+                }
+                do {
+                    System.out.println("-------------------------------------------------------------------------------------------------------");
+                    System.out.println("\n   Seja bem-vindo ao Bankcrash!\n"
+                            + "Em uma pacata cidadezinha do interior de São Paulo, onde todos se conhecem,\n"
+                            + "onde nada acontece, se localiza o Bankcrash, a unica agência bancária dessa cidade,\n"
+                            + "responsável por parte da economia local");
+                    System.out.println("\nDigite '0' para prosseguir");
+                    a = imput.nextInt();
+                    if ((a > 0) || (a < 0)) {
+                        System.out.println("Opção inválida, digite novamente!");
+                    }
+                } while (a != 0);
+                this.setescolhaDePersonagem();
+            }
+
+            case 3 -> {// créditos do jogo 
+                opcao = 3;
+                String creditos = "creditos.txt";
+                lerArquivoTexto(creditos);
+
+                do {
+                    System.out.println("\nDigite '1' para voltar ao menu");
+                    a = imput.nextInt();
+                    if (a < 1 || a > 1) {
+                        System.out.println("Opção inválida, digite novamente!");
+                    }
+                } while (a != 1);
+                System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                setmenuPrincipal();
+            }
+
+            case 4 -> {// finalização do programa
+                opcao = 4;
+                do {
+                    System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                    System.out.println("\nDigite '0' para confirmar a saida ou '1' para voltar");
+                    a = imput.nextInt();
+                    if (a < 0 || a > 1) {
+                        System.out.println("Opção inválida, digite novamente!");
+                    } else if (a == 1) {
+                        setmenuPrincipal();
+                    }
+                } while (a != 0);
+                System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                System.out.println("Saindo...");
+                System.out.println("- Obrigado por jogar !");
+                System.exit(0); // Função que finaliza o programa/jogo
+            }
+        }
+        if ((opcao < 1) || (opcao > 4)) {
+            System.out.println("\nOpção inválida, tente novamente!");
+            setmenuPrincipal();
+        }
+    }// Final do Menu Principal           
+
+    public int setescolhaDePersonagem() {
+        Scanner imput = new Scanner(System.in);
+        int a;
+
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        System.out.println("\n  *** Seleção de personagens ***");
+
+        do {
+            System.out.println("\nDigite 1 para: EMPRESÁRIO:\n Investimento de vida\n"
+                    + "Nome: Ricardo "
+                    + "\nIdade: 31 anos "
+                    + "\nProfissão: Proprietário da empresa de segurança do Bankcrash");
+
+            System.out.println("\nSelecione o personagem com que deseja jogar");
+            escolhaDePersonagem = imput.nextInt();
+            if (escolhaDePersonagem < 1 || escolhaDePersonagem > 1) {
+                System.out.println("\nopção inválida! Digite novamente\n");
+            }
+            switch (escolhaDePersonagem) { // Estrutura utilizada para seguir conforme o usuário decidir. 1 - 2 - 3
+                case 1 ->
+                    setEmpresário();
+
+            }
+        } while (escolhaDePersonagem < 1 || escolhaDePersonagem > 3);
+
+        // após vencer ou perder, o direcionamento do código voltará para este ponto e continuará.
+        do {
+            System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+            System.out.println("\nDigite '0' para prosseguir e voltar ao Menu Principal.(Sair - finalizar o jogo)"
+                    + "\nOu '1' para o Menu de Seleção de Personagens.(Jogar o Bankcrash com outro personagem)");
+            a = imput.nextInt();
+            if (a == 0) {
+                System.out.println("Acessando Menu Principal");
+                vida = 2;
+                setmenuPrincipal();
+            } else if (a == 1) {
+                System.out.println("Acessando Menu de Seleção de Personagens");
+                vida = 2;
+                setescolhaDePersonagem();
+            } else if ((a > 1) || (a < 0)) {
+                System.out.println("Opção inválida, digite novamente!");
+            }
+        } while (a != 0 || a != 1);
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        return 0;
+    }// Seleção do personagem
+
+    public void setEmpresário() {
+        percepçao = 1;
+
+        String arquivo3 = "arquivo3.txt";
+        lerArquivoTexto(arquivo3);
+        int escolha = 0;
+        Scanner imput = new Scanner(System.in);
+        int a;
+        do {
+            System.out.println("\nDigite '1' - Avançar");
+            a = imput.nextInt();
+            if (a < 1 || a > 1) {
+                System.out.println("Opção inválida, digite novamente!");
+            }
+        } while (a != 1);
+        // como esse personagem ja conhece a segurança do banco, ele ja vai no caminho certo.
+        String arquivo4 = "arquivo4.txt";
+        lerArquivoTexto(arquivo4);
+
+        do {
+            System.out.println("\nDigite '1' - Avançar");
+            a = imput.nextInt();
+            if (a < 1 || a > 1) {
+                System.out.println("Opção inválida, digite novamente!");
+            }
+        } while (a != 1);
+        String arquivo5 = "arquivo5.txt";
+        lerArquivoTexto(arquivo5);
+
+        do {
+            System.out.println("\nDigite '1' - Avançar");
+            a = imput.nextInt();
+            if (a < 1 || a > 1) {
+                System.out.println("Opção inválida, digite novamente!");
+            }
+        } while (a != 1);
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        System.out.println(" ------ > Capitulo 1 O plano <-------");
+        System.out.println("\nAgora que vc tomou a decisão e viu que não tem nada a perder, decidiu "
+                + "\nchamar uns amigos das antigas, voce apresentou as falhas de segunraça do banco,"
+                + "\ne eles toparam de primeira!");
+        System.out.println("\nAgora começa as escolhas!");
+        do {
+            System.out.println("\nAnalisando todos os fatos, voce decide");
+            System.out.println("1 - Fazer um plano para criar um tunel e entrar dentro do cofre");
+            System.out.println("2 - entrar pela frente botando o terror em todo mundo");
+            System.out.println("3 - tentar subornar o gerente do banco");
+            escolha = imput.nextInt();
+
+            if (escolha == 1) {
+                pontuacao++;
+            } else {
+                pontuacao--;
+            }
+
+            if (escolha >= 4 || escolha <= 0) {
+                System.out.println("\nopcao invalida! Digite novamente!");
+                escolha = imput.nextInt();
+            }
+        } while (escolha < 1 || escolha > 3);
+        if (vida > 0) {
+            setEmpresárioDes1(escolha);
+            String arquivo6 = "arquivo6.txt";
+            lerArquivoTexto(arquivo6);
+            pontuacao++;
+
+            do {
+                if (percepçao < 2) {
+                    System.out.println("\n1 - voce abrir a porta e deixar os parceiros tamparem o buraco, guardar "
+                            + "\ntodas as ferramentas e deixarem os policiais entrarem");
+                    System.out.println("2 - Figir que não tem ninguem na casa e esperar eles irem embora");
+                    System.out.println("3 - não deixar entrar falando que eles nao tem mandato judicial");
+                    escolha = imput.nextInt();
+                    if (escolha >= 4 || escolha <= 0) {
+                        System.out.println("\nopcao invalida! Digite novamente!");
+                        escolha = imput.nextInt();
+                    }
+                }
+                if (escolha == 1) {
+                    pontuacao++;
+                } else {
+                    pontuacao--;
+                }
+
+                if (percepçao >= 2) {
+                    System.out.println("\n1 - voce abrir a porta e deixar os parceiros tamparem o buraco, guardar "
+                            + "\ntodas as ferramentas e deixarem os policiais entrarem");
+                    System.out.println("\n3 - não deixar entrar falando que eles nao tem mandato judicial");
+                    escolha = imput.nextInt();
+                    if (escolha > 3 || escolha <= 0 || escolha == 2) {
+                        System.out.println("\nopcao invalida! Digite novamente!");
+                        escolha = imput.nextInt();
+                    }
+                }
+            } while (escolha != 1 || escolha == 3);
+        }
+        if (vida > 0) {
+            setEmpresárioDes2(escolha);
+            //System.out.println("sua vida total eh " + vida);
+        }
+        if (vida > 0) {
+            String arquivo7 = "arquivo7.txt";
+            lerArquivoTexto(arquivo7);
+
+            do {
+                System.out.println("\nDigite '1' - Avançar");
+                a = imput.nextInt();
+                if (a < 1 || a > 1) {
+                    System.out.println("Opção inválida, digite novamente!");
+                }
+            } while (a != 1);
+            if (percepçao < 2) {
+                System.out.println("\n1 - > Atirar no vigilante!");
+                System.out.println("2 - > Render e amarrar o vigilante");
+                System.out.println("3 -> Oferecer uma sacola de dinheiro para ele, e chamar ele para fechar o cofre "
+                        + "\ne entrar no buraco !");
+                escolha = imput.nextInt();
+            }
+            if (percepçao >= 2) {
+                System.out.println("\n2 - > Render e amarrar o vigilante");
+                System.out.println("3 -> Oferecer uma sacola de dinheiro para ele, e chamar ele para fechar o cofre "
+                        + "\ne entrar no buraco !");
+                escolha = imput.nextInt();
+            }
+            setEmpresárioDes3(escolha);
+        }
+
+        if (vida > 0) {
+            // sainda da casa
+            String arquivo8 = "arquivo8.txt";
+            lerArquivoTexto(arquivo8);
+
+            if (percepçao < 2) {
+                System.out.println("\n1 - > Dar um tiro no escuro para ver em quem pega!");
+                System.out.println("2 - > Esperar para ver quem é");
+                System.out.println("3 -> Detonar a bomba e deixar seus amigos presos!");
+                escolha = imput.nextInt();
+            }
+            if (percepçao >= 2) {
+                System.out.println("\n2 - > Esperar para ver quem é");
+                System.out.println("3 -> Detonar a bomba e deixar seus amigos presos!");
+                escolha = imput.nextInt();
+            }
+
+            setEmpresárioDes4(escolha);
+        }
+        if (vida > 0) {
+            // sainda da casa
+            String arquivo9 = "arquivo9.txt";
+            lerArquivoTexto(arquivo9);
+
+            if (percepçao < 2) {
+                System.out.println("\n1 - > Sair de fininho sem a grana mas com o bolso cheio de diamante");
+                System.out.println("2 - > tentar subornar os guardar para vc sair com uma barte da grana");
+                System.out.println("3 ->  sair pela porta dos fundos com uma sacola de dinheiro e os diamantes no bolso.");
+                escolha = imput.nextInt();
+            }
+            if (percepçao >= 2) {
+                System.out.println("\n1 - > Sair de fininho sem a grana mas com o bolso cheio de diamante");
+                System.out.println("2 - > tentar subornar os guardar para vc sair com uma barte da grana");
+                escolha = imput.nextInt();
+            }
+            setEmpresárioDes5(escolha);
+        }
+        if (vida == 0) {
+            System.out.println("Game Over!");
+        }
+    }// Missão do Empresario
+
+    public void setEmpresárioDes1(int escolha1) {
+        Scanner input = new Scanner(System.in);
+        int entrar = 0;
+        //int escolha = 0;                  
+
+        System.out.println(pontuacao);
+        do {
+            do {
+                switch (escolha1) {
+                    case 1:
+                        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                        System.out.println("\nVoce se reuniu com seus camaradas, e um dos seus parceiros contou para um "
+                                + "\namigo de confianca esse amigo decidiu se juntar ao grupo");
+
+                        vida++;
+                        System.out.println("\nSua vida -> " + vida);
+                        percepçao++;
+                        System.out.println("Sua percepçao -> " + percepçao);
+                        break;
+                    case 2:
+
+                        if (entrar == 1) {
+                            System.out.println("\nvoce insistiu entrar pela frente");
+                            System.out.println("chegou na cara do banco, deu um tiro pra cima, e começou a trocação de bala");
+                            System.out.println("seu parceiro foi atingido e morreu");
+                            System.out.println("voce ficou sozinho e conseguiu dar linha");
+                            vida--;
+                            entrar++;
+                            System.out.println(vida);
+                            break;
+                        }
+                        if (entrar == 0) {
+
+                            System.out.println("\nvoce pegou um carro e junta com os parceiros foi botar o terror no banco!");
+                            System.out.println("Quando um dos seus parceiros saiu do carro, e foi pela lateral, ele foi visto "
+                                    + "\ncom a arma na cintura e foi abordado por um polical, que puxou sua ficha e viu que "
+                                    + "\nele era um foragido, logo mandou seu amigo de volta para cadeia!");
+                            System.out.println("voce perdeu uma vida");
+                            vida--;
+                            entrar++;
+                            System.out.println(vida);
+                            break;
+                        }
+                        if (entrar == 2) {
+                            System.out.println("\nnao tem jeito, voce quer botar fogo em tudo!");
+                            System.out.println("chegou pela frente, jogou uma molotov no banco, e começou a trocar tiros");
+                            System.out.println("Mas como voce nao eh o rambo, tomou um tiro e morreu");
+                            vida--;
+                            entrar++;
+                            System.out.println(vida);
+                            break;
+                        }
+                    case 3:
+                        if (entrar == 0) {
+
+                            System.out.println("\nvoce como bom malandro tentou subornar o gerente");
+                            System.out.println("Mas nao foi otario de dar as caras, então mandou seu amigo fazer isso!");
+                            System.out.println("Ele foi la, o gerente nao aceitou e o denuciou e como vc so tem amigos "
+                                    + "\nque ja foram para cadeia, ele voltou para lá");
+                            vida--;
+                            entrar++;
+                            System.out.println(vida);
+                            break;
+                        }
+                        if (entrar == 1) {
+                            System.out.println("\nvoce achou que seu primeiro amigo foi muito burro na arte do convenciomento, "
+                                    + "\nentao mandou o outro capacho");
+                            System.out.println("O resultado foi igualmente idiota");
+                            vida--;
+                            System.out.println(vida);
+                            break;
+                        }
+                        if (entrar == 2) {
+                            System.out.println("\nDessa vez voce decidiu fazer as coisas do seu jeito, mostrar quem tem carisma "
+                                    + "\nde verdade!");
+                            System.out.println("E voce não eh nenhum brad pitt, deu errado para voce tambem");
+                            System.out.println("Vai para cadeia!");
+                            vida--;
+                            System.out.println(vida);
+                            entrar++;
+                            break;
+                        }
+                        entrar++;
+                }
+                if (escolha1 >= 4 || escolha1 <= 0) {
+                    System.out.println("\nopcao invalida digite novamente!");
+                    escolha1 = input.nextInt();
+                }
+            } while (escolha1 < 1 || escolha1 > 3);
+            if (vida > 0) {
+
+                if (escolha1 == 2 || escolha1 == 3) {
+
+                    System.out.println("\nAnalisando todos os fatos, voce decide");
+                    System.out.println("1 - Fazer um plano para criar um tunel e entrar dentro do cofre");
+                    System.out.println("2 - entrar pela frente botando o terror em todo mundo");
+                    System.out.println("3 - tentar subornar o gerente do banco");
+                    escolha1 = input.nextInt();
+                }
+            }
+            if (vida == 0) {
+                System.out.println("\nvoce perdeu!");
+                escolha1 = 1;
+            }
+        } while (escolha1 != 1);
+
+    } // Desafio 1 Empresário
+
+    public void setEmpresárioDes2(int escolha2) {
+        Scanner input = new Scanner(System.in);
+        int entrar1 = 0;
+        int entrar2 = 0;
+        do {
+            do {
+                switch (escolha2) {
+                    case 1: // opcao correta!
+                        System.out.println("\nEntão os policiais revistaram a casa, não acharam anda, porém ficaram "
+                                + "\ncom um olhar desconfiado, e foram embora!");
+                        vida++;
+                        vida++;
+                        percepçao++;
+                        System.out.println("\nSua vida -> " + vida);
+                        System.out.println("Sua percepçao ->" + percepçao);
+                    case 2: // opcao errada1
+                        System.out.println("\nEntão voces se esconderam, e esperaram eles irem embora, porém os "
+                                + "\npoliciais eram mais insistentes do que voce imaginava");
+                        if (entrar1 == 0) {
+                            //System.out.println("opcao errada");
+                            percepçao--;
+                            System.out.println("\nSua percepçao eh " + percepçao);
+                            vida--;
+                            System.out.println("Sua vida total eh " + vida);
+                            entrar1++;
+                            break;
+                        }
+                        if (entrar1 > 0) {
+                            System.out.println("\nEssa posicao ja foi escolhida digita uma outra opcao");
+                            break;
+                        }
+                    case 3: // opcao errada!
+                        System.out.println("\nOs policias pegou na sua blusa, e deu um soco na sua cara! "
+                                + "\ne disse, voce acha que eu sigo a lei ? ");
+                        if (entrar2 == 0) {
+                            percepçao--;
+                            System.out.println("Sua percepçao eh " + percepçao);
+                            vida--;
+                            System.out.println("Sua vida total eh " + vida);
+                            entrar2++;
+                            break;
+                        }
+                        if (entrar2 > 0) {
+                            System.out.println("\nopcao errada, digite novamente!");
+                        }
+                }
+                if (escolha2 >= 4 || escolha2 <= 0) {
+                    System.out.println("\nopcao invalida! Digite novamente!");
+                    escolha2 = input.nextInt();
+                }
+            } while (escolha2 < 1 || escolha2 > 3);
+            if (vida > 0) {
+
+                if (escolha2 == 2 || escolha2 == 3) {
+
+                    System.out.println("\n1 - guardar todas as ferramentas e deixarem os policiais entrarem");
+                    System.out.println("2 - tentar subornar os policiais");
+                    System.out.println("3 - não deixar entrar falando que eles nao tem mandato judicial");
+                    escolha2 = input.nextInt();
+                }
+            }
+            if (vida == 0) {
+                System.out.println("\nvoce perdeu!");
+                escolha2 = 1;
+            }
+        } while (escolha2 != 1);
+
+    } // Desafio 2 Empresário
+
+    public void setEmpresárioDes3(int escolha3) {
+        Scanner input = new Scanner(System.in);
+        int entrar1 = 0;
+        int entrar2 = 0;
+        //System.out.println("funcao 3");
+        do {
+            do {
+                switch (escolha3) {
+                    case 1:
+                        System.out.println("\nvoce atirou no policial, e o tiro não pegou nele, entao o vigilente revidou,"
+                                + "\no tiro pegou na sua perna, fechou o cofre e disparou o alarme! Seus comparsar ficaram"
+                                + "\ncom medo de vc caguetar para a policia, e te deram um tiro na cabeça!");
+                        vida = 0;
+                        System.out.println("\nVoce morreu");
+                    case 2: // opcao correta
+                        System.out.println("\nNa hora voce tirou a arma da cintura, rendeu o vigilante e o amarrou"
+                                + "\nPassou 5 minutos o segunraça não voltou para o posto, e disparram o alarme!");
+                        if (entrar1 == 0) {
+                            System.out.println("\nVocê Passou!");
+                            vida++;
+                            System.out.println("Sua vida total eh " + vida);
+                            entrar1++;
+                            break;
+                        }
+                        if (entrar1 > 0) {
+                            System.out.println("\nessa posicao ja foi escolhida digita uma outra opcao");
+                            break;
+                        }
+                    case 3: // opcao errada!
+                        System.out.println("\nVoce ofereceu uma sacola de dinheiro para o vigilante e chamou ele "
+                                + "\npara entrar no tunel com voce");
+                        System.out.println("Então voce percebeu que ele não aceitou!");
+                        if (entrar2 == 0) {
+                            System.out.println("opcao errada");
+                            vida--;
+                            System.out.println("\nSua vida total eh " + vida);
+                            percepçao--;
+                            System.out.println("Sua percepçao total eh " + percepçao);
+                            entrar2++;
+                            break;
+                        }
+                        if (entrar2 > 0) {
+                            System.out.println("\nopcao errada, digite novamente!");
+                        }
+
+                }
+                if (escolha3 >= 4 || escolha3 <= 0) {
+                    System.out.println("\nopcao invalida! Digite novamente!");
+                    escolha3 = input.nextInt();
+                }
+            } while (escolha3 < 1 || escolha3 > 3);
+            if (vida > 0) {
+
+                if (escolha3 == 1 || escolha3 == 3) {
+
+                    System.out.println("\n1 - > Atirar no vigilante!");
+                    System.out.println("2 - > Render e amarrar o vigilante");
+                    System.out.println("3 -> Oferecer uma sacola de dinheiro para ele, e chamar ele para "
+                            + "\nfechar o cofre e entrar no buraco !");
+                    escolha3 = input.nextInt();
+                }
+            }
+            if (vida == 0) {
+                System.out.println("\nvoce perdeu!");
+                escolha3 = 2;
+            }
+        } while (escolha3 != 2);
+
+    } //  Desafio 3 Empresário
+
+    public void setEmpresárioDes4(int escolha4) {
+        Scanner input = new Scanner(System.in);
+        int entrar1 = 0;
+        int entrar2 = 0;
+
+        do {
+            do {
+                switch (escolha4) {
+                    case 1: // opcao errada!
+                        if (entrar1 == 0) {
+                            System.out.println("\nVoce deu um tiro no escuro, pegou alguém mas voçê não sabe "
+                                    + "\nem quem pegou!");
+                            System.out.println("\nSua vida total eh -> " + vida);
+                            percepçao--;
+                            System.out.println("Sua percepçao eh -> " + percepçao);
+                            entrar1++;
+                            break;
+                        }
+                        if (entrar1 > 0) {
+                            System.out.println("\nessa opcao ja foi escolhida digita uma outra opcao");
+                            break;
+                        }
+
+                    case 2: // opcao errada
+                        System.out.println("\nQuando quem estava correndo chegou perto, era um policial, "
+                                + "\nele te deu um tiro, e voce conseguiu revidar dando um tiro na "
+                                + "\ncabeça dele");
+                        if (entrar1 == 0) {
+                            System.out.println("opcao errada");
+                            vida--;
+                            System.out.println("\nSua vida total eh " + vida);
+                            percepçao--;
+                            System.out.println("Sua percepçao total eh " + percepçao);
+                            entrar1++;
+                            break;
+                        }
+                        if (entrar1 > 0) {
+                            System.out.println("\nessa posicao ja foi escolhida digita uma outra opcao");
+                            break;
+                        }
+
+                    case 3: // opcao correta
+                        System.out.println("\nA vida eh assim parceiro, voce não teve outra escolha!"
+                                + "\nVoce apertou o botão e pronto! onde era um tunel, virou só terra novamente"
+                                + "\nNão deixou rastro nenhum!"
+                                + "\nFicou com a Grana toda!"
+                                + "\nFoi mais esperto que o coringa!");
+                        if (entrar2 == 0) {
+                            vida++;
+                            System.out.println("\nSua vida total eh " + vida);
+                            percepçao++;
+                            System.out.println("Sua percepçao total eh " + percepçao);
+                            entrar2++;
+                            break;
+                        }
+                        if (entrar2 > 0) {
+                            System.out.println("\nopcao errada, digite novamente!");
+                        }
+                }
+                if (escolha4 >= 4 || escolha4 <= 0) {
+                    System.out.println("\nopcao invalida! Digite novamente!");
+                    escolha4 = input.nextInt();
+                }
+            } while (escolha4 < 1 || escolha4 > 3);
+            if (vida > 0) {
+
+                if (escolha4 == 2 || escolha4 == 1) {
+
+                    System.out.println("\n1 - > Dar um tiro no escuro para ver em quem pega!");
+                    System.out.println("2 - > Esperar para ver quem é");
+                    System.out.println("3 -> Detonar a bomba e deixar seus amigos presos!");
+                    escolha4 = input.nextInt();
+                }
+            }
+            if (vida == 0) {
+                System.out.println("\nvoce perdeu!");
+                escolha4 = 3;
+            }
+        } while (escolha4 != 3);
+
+    } // Desafio 4 Empresário      
+
+    public void setEmpresárioDes5(int escolha5) {
+
+        Scanner input = new Scanner(System.in);
+        int entrar1 = 0;
+        int entrar2 = 0;
+
+        do {
+            do {
+                switch (escolha5) {
+                    case 1: // opcao correta
+                        String arquivo10 = "arquivo10.txt";
+                        lerArquivoTexto(arquivo10);
+                        System.out.println("Bankcrash Ranking ");
+
+                        //String pontos = "pontos.txt";
+                        //lerArquivoTexto(pontos);
+                        break;
+
+                    case 2: // opcao errada
+                        String arquivo11 = "arquivo11.txt";
+                        lerArquivoTexto(arquivo11);
+
+                        vida = 0;
+                        System.out.println("\nsua vida eh " + vida);
+                        System.out.println("Game Over!");
+                        if (entrar1 == 0) {
+                            break;
+                        }
+
+                        if (entrar1 > 0) {
+                            System.out.println("\nessa posicao ja foi escolhida digita uma outra opcao");
+                            break;
+                        }
+
+                    case 3: // opcao errada
+
+                        if (entrar2 == 0) {
+                            System.out.println("\nVoce foi sair pela porta dos fundos de boa, achando que ia "
+                                    + "\ndar tudo certo! Quando viu que tambem tinha policiais vindo pelo fundo,"
+                                    + "\né hora de dar ré! Voce voltou para casa!");
+                            percepçao--;
+                            System.out.println("\nSua percepçao eh " + percepçao);
+                            vida--;
+                            System.out.println("Sua vida total eh " + vida);
+                            entrar2++;
+                            break;
+                        }
+                        if (entrar2 > 0) {
+                            System.out.println("\nopcao errada, digite novamente!");
+                        }
+                }
+                if (escolha5 >= 4 || escolha5 <= 0) {
+                    System.out.println("\nopcao invalida! Digite novamente!");
+                    escolha5 = input.nextInt();
+                }
+            } while (escolha5 < 1 || escolha5 > 3);
+            if (vida > 0) {
+
+                if (escolha5 == 2 || escolha5 == 3) {
+
+                    System.out.println("\n1 - > Sair de fininho sem a grana mas com o bolso cheio de diamante");
+                    System.out.println("2 - > tentar subornar os guardar para vc sair com uma parte da grana");
+                    System.out.println("3 ->  sair pela porta dos fundos com uma sacola de dinheiro e os "
+                            + "\ndiamantes no bolso.");
+                    escolha5 = input.nextInt();
+                }
+            }
+            if (vida == 0) {
+                //System.out.println("voce perdeu!");
+                escolha5 = 1;
+            }
+        } while (escolha5 != 1);
+        //escritorRanking(pr, pontuacao + "");
+        ranking(pontuacao);
+        ordenador();
+    } // Desafio 5 Empresário
+
+    public void ordenador() {
+
+        //Path pontos = Paths.get("pontos.txt");
+        
+        String pontos = "pontos.txt";
+        int vetor[] = {pontos.length()};
+        //int vetor[] = {2, 5, 6, 1};
+        int aux = 0;
+        for (int i = 0; i < vetor.length; i++) {
+            for (int j = 0; j < vetor.length - 1; j++) {
+                if (vetor[j] < vetor[j + 1]) {
+                    aux = vetor[j];
+                    vetor[j] = vetor[j + 1];
+                    vetor[j + 1] = (byte) aux;
+                }
+            }
+        }
+        for (int i = 0; i < vetor.length; i++) {
+            System.out.println(vetor[i] + " ");
+        }
+    }// Organiza o ranking em ordem decrescente
+
+    public String getMenuPrincipal() {
+        return menuPrincipal;
+    }
+
+    public int getEscolhaDePersonagem() {
+        return escolhaDePersonagem;
+    }
+
+    public String getEmpresário() {
+        return Empresário;
+    }
+
+    public String getEmpresárioDesc1() {
+        return EmpresárioDesc1;
+    }
+
+    public String getEmpresárioDesc2() {
+        return EmpresárioDesc2;
+    }
+
+    public String getEmpresárioDesc3() {
+        return EmpresárioDesc3;
+    }
+
+    public String getEmpresárioDesc4() {
+        return EmpresárioDesc4;
+    }
+
+    public String getEmpresárioDesc5() {
+        return EmpresárioDesc5;
+    }
+}
